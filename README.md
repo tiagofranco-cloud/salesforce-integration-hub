@@ -1,18 +1,96 @@
-# Salesforce DX Project: Next Steps
+# Salesforce Integration Hub
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Enterprise-grade integration logging framework built with Salesforce Apex and Custom Objects.
 
-## How Do You Plan to Deploy Your Changes?
+This project implements a structured observability pattern for inbound and outbound integrations inside Salesforce.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+---
 
-## Configure Your Salesforce DX Project
+## 🎯 Objective
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+Provide a scalable and idempotent logging architecture to:
 
-## Read All About It
+- Track external events
+- Prevent duplicate processing
+- Log retry attempts
+- Measure HTTP status and latency
+- Enable future retry orchestration
+- Support enterprise-grade integration monitoring
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+---
+
+## 🏗 Architecture Overview
+
+### Core Objects
+
+**Integration_Event__c**
+- Correlation_Id__c
+- External_Event_Id__c
+- Source_System__c
+- Event_Type__c
+- Status__c
+
+Represents the consolidated business event.
+
+**Integration_Attempt__c**
+- Attempt_Number__c
+- Direction__c (INBOUND | OUTBOUND)
+- Http_Status__c
+- Duration_Ms__c
+- Error_Message__c
+- Master-Detail → Integration_Event__c
+
+Represents each processing attempt.
+
+---
+
+## 🧠 Service Layer
+
+`IntegrationLogger.cls`
+
+Provides:
+
+- Idempotent event upsert
+- Attempt creation
+- Event status updates
+
+Designed following service-layer and observability patterns.
+
+---
+
+## 🧪 Testing
+
+`IntegrationLoggerTest.cls`
+
+- Covers event creation
+- Covers attempt creation
+- Covers status updates
+- 100% pass rate in Developer Org
+
+---
+
+## 🚀 Next Steps
+
+- Add retry orchestration via Queueable Apex
+- Implement HTTP callout service
+- Introduce circuit breaker pattern
+- Create LWC dashboard for monitoring
+- Enable External ID for idempotency optimization
+
+---
+
+## 📌 Tech Stack
+
+- Salesforce DX
+- Apex
+- Custom Objects (Metadata API)
+- SOQL
+- CLI-based deployment
+- Git version control
+
+---
+
+## 👤 Author
+
+Tiago Franco  
+Cloud / DevOps Engineer → Salesforce Integration Architect (in progress)
