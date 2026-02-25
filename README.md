@@ -1,45 +1,18 @@
-# Salesforce Integration Hub
+# Salesforce DX Project: Next Steps
 
-Enterprise-grade Salesforce integration architecture with APIs, webhooks, async processing, retries and observability.
+Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
 
-## What this project demonstrates
-This repository is a hands-on reference implementation of common integration patterns used in enterprise Salesforce projects:
+## How Do You Plan to Deploy Your Changes?
 
-- Inbound webhooks (Apex REST) with **idempotency**
-- Async processing (Queueable/Batch) with **retry** and **dead-letter**
-- Outbound sync (Salesforce → external API) with resiliency
-- **Named Credentials / OAuth** best practices
-- **Observability**: correlationId, structured logs, reprocessing flows
-- Salesforce DX workflow (source-driven development)
+Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
 
-## Architecture (high level)
-> Diagram will be added in `docs/architecture/`.
+## Configure Your Salesforce DX Project
 
-**Flows**
-1. **Inbound**: External System → Webhook (Apex REST) → Queue → Persist → Integration Log  
-2. **Outbound**: Salesforce Change → Sync Job → External API → Retry/Dead-letter → Integration Log  
-3. **Ops**: LWC Dashboard → View status → Reprocess failed messages
+The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
 
-## Tech stack
-- Salesforce: Apex, SOQL, Async Apex, LWC
-- Integration: REST, Webhooks, OAuth (Named Credentials)
-- Tooling: Salesforce CLI (sf), VS Code, Git
+## Read All About It
 
-## Repository structure
-- `force-app/` — Salesforce source (Apex/LWC/metadata)
-- `docs/architecture/` — diagrams and technical notes
-- `docs/adr/` — Architecture Decision Records (ADRs)
-- `scripts/` — helper scripts (deploy, test, etc.)
-
-## Roadmap (MVP)
-- [ ] Create Salesforce DX project structure under `force-app/`
-- [ ] Define objects: `Integration_Log__c` (and supporting fields)
-- [ ] Implement inbound webhook (Apex REST) + idempotency key
-- [ ] Implement async pipeline (Queueable) + retry + dead-letter
-- [ ] Implement outbound sync service + Named Credential
-- [ ] Create LWC dashboard for logs and reprocessing
-- [ ] Add architecture diagram and ADRs
-- [ ] Add CI workflow (basic: run tests)
-
-## Notes
-This project is built as a portfolio piece focusing on **integration/architecture** patterns — the same topics that appear in high-ticket Salesforce engagements.
+- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
+- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
+- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
+- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
