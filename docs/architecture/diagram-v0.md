@@ -1,6 +1,6 @@
 # Architecture Diagram (v0)
 
-## High-level flow
+## High-level flow (Event + Attempt model)
 
 [External System]
     |
@@ -8,13 +8,20 @@
     v
 [Apex REST Webhook Endpoint]
     |
-    | 2) Create/Update Integration_Log__c (RECEIVED)
-    | 3) Enqueue async job
+    | 2) Upsert Integration_Event__c (RECEIVED)
+    |    - correlationId
+    |    - externalEventId (idempotency key)
+    |
+    | 3) Create Integration_Attempt__c (#1)
+    |    - direction, httpStatus, duration, error (if any)
+    |
+    | 4) Enqueue async job
     v
 [Queueable / Async Processor]
     |
-    | 4) Validate + Transform + Persist domain data
-    | 5) Update Integration_Log__c (SUCCESS / FAILED / RETRYING / DEAD_LETTER)
+    | 5) Validate + Transform + Persist domain data
+    | 6) Create Integration_Attempt__c (retry attempts as needed)
+    | 7) Update Integration_Event__c (SUCCESS / FAILED / DEAD_LETTER)
     v
 [Salesforce Data Model (Custom Objects)]
 
@@ -22,12 +29,13 @@
 
 [Salesforce Change/Event]
     |
-    | 1) Schedule/Trigger sync
+    | 1) Schedule/Trigger outbound sync
     v
 [Outbound Sync Service (Apex)]
     |
     | 2) Call external API via Named Credential (OAuth)
-    | 3) Update Integration_Log__c with httpStatus + timing
+    | 3) Create Integration_Attempt__c for each call
+    | 4) Update Integration_Event__c consolidated status
     v
 [External System]
 
@@ -35,7 +43,7 @@
 
 [LWC Dashboard]
     |
-    | View: status, counts, recent failures
-    | Action: reprocess failed logs (future)
+    | View: events, attempts, failure rate, retries, dead letters
+    | Action: reprocess failed/dead-letter events (future)
     v
-[Integration_Log__c]
+[Integration_Event__c + Integration_Attempt__c]
